@@ -1,8 +1,8 @@
 # My-PearOCR
 大伙可以去体验一下PearOCR官方 https://pearocr.com/#/ 功能   
 前端OCR识别是个很好的思路，这样识别的消耗完全由客户游览器承担，节省了大量服务器和网络资源   
-在众多开源OCR识别中我发现PearOCR是集精度，使用体验最好的一个，可惜PearOCR没有开源，那么我们如何把PearOCR集成到自己的前端项目中呢？    
-My-PearOCR是一种集成PearOCR的Demo实验   
+在众多开源OCR识别中我发现PearOCR是集精度，使用体验最好的一个，可惜PearOCR没有开源也没有SDK，那么我们如何把PearOCR集成到自己的前端项目中呢？    
+My-PearOCR是一种集成PearOCR的Demo实验，为集成PearOCR提供一种思路，请勿用于商业用途！！！    
 
 
 
