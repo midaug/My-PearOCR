@@ -10,7 +10,7 @@ My-PearOCR是一种集成PearOCR的Demo实验，为集成PearOCR提供一种思�
 https://ocr.midaug.win/   
 离线资源有点多，打开网页后查看控制台出现antOcr.onSetLangFinish消息即为全部加载成功   
 
-![](https://github.com/midaug/My-PearOCR/images/demo.gif)
+![](./images/demo.gif)
 
    
 ## 原理
