@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width">
+  <style>
+    body {
+      padding: 0px;
+      margin: 0px;
+    }
+
+    body .my-div {
+      width: calc(100% - 20px);
+      margin: auto;
+    }
+
+    .my-clz {
+      width: 100%;
+      margin: 5px auto;
+      display: block;
+      padding: 5px;
+      border-width: 1px !important;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+    }
+
+    #addImgOcr {
+      height: 40px;
+      font-size: 25px;
+      line-height: 25px;
+      background-color: darkgrey;
+    }
+
+    #time {
+      height: 30px;
+    }
+
+    #resp {
+      height: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <iframe id="ocr" name="ocr" src="./index.html" style="width: 1000px;height: 500px;display: none;"></iframe>
+  <div class="my-div">
+    <input class="my-clz" type="text" id="time" placeholder="显示识别耗时" />
+    <textarea class="my-clz" id="resp" placeholder="显示识别结果；从点击识别图片按钮时开始异步执行，超过7秒未选择图片提示错误只能重新点击’识别图片‘按钮，图片越大识别时间越长，超过25秒未完成识别视为失败"></textarea>
+    <input class="my-clz" type="button" id="addImgOcr" value="识别图片" />
+  </div>
+
+</body>
+<script src="./jquery-3.6.1.min.js"></script>
+<script>
+  var ocrIframe = $("#ocr");
+
+  ocrIframe[0].onload = function () {
+
+    var ocr = ocrIframe.contents();
+
+    function funcTime(start, outTime, func, errFunc) {
+      setTimeout(function () {
+        var r = func();
+        time = new Date().getTime() - start;
+        if (r) {
+          return;
+        } else if (time < outTime) {
+          funcTime(start, outTime, func, errFunc);
+        } else {
+          errFunc();
+        }
+      }, 200);
+    }
+
+    function getOcrVal(start) {
+      funcTime(new Date().getTime(), 25000, function () {
+        time = new Date().getTime() - start;
+        $("#time").val("识别耗时：" + time);
+        var respText = ocr.find("textarea");
+        if (respText && respText.length > 0) {
+          if (respText.val()) {
+            $("#resp").val(respText.val());
+          } else {
+            $("#resp").val("识别异常！！！");
+          }
+          ocr.find("i:contains('delete_outline')").click();
+          $('#addImgOcr').removeAttr("disabled");
+          $("#time").val("识别完成：" + time);
+          return true;
+        }
+        return false;
+      }, function () {
+        console.log("OCR 识别超时 >", time);
+        $("#resp").val("OCR 识别超时！！！");
+        $('#addImgOcr').removeAttr("disabled");
+      });
+    }
+
+    $("#addImgOcr").click(function () {
+      $("#resp").val("");
+      $("#time").val("");
+      ocr.find("i:contains('delete_outline')").click(); //清理历史识别结果
+      ocr.find("#addImage").click(); //触发pearocr页面’增加图像‘按钮
+      funcTime(new Date().getTime(), 7000, function () {
+        if (ocr.find(".ImageItem .ImageItemSize").length > 0) {
+          $('#addImgOcr').attr('disabled', 'disabled');
+          getOcrVal(new Date().getTime()); //获取当前识别结果
+          return true;
+        }
+        return false;
+      }, function () {
+        console.log("选择图片超时 >", time);
+        $("#resp").val("选择图片超时！！！");
+        $('#addImgOcr').removeAttr("disabled");
+      });
+    });
+
+
+  }
+</script>
+
+</html>
