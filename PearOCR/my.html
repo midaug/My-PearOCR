@@ -45,32 +45,33 @@
   <iframe id="ocr" name="ocr" src="./index.html" style="width: 1000px;height: 500px;display: none;"></iframe>
   <div class="my-div">
     <input class="my-clz" type="text" id="time" placeholder="显示识别耗时" />
-    <textarea class="my-clz" id="resp" placeholder="显示识别结果；从点击识别图片按钮时开始异步执行，超过7秒未选择图片提示错误只能重新点击’识别图片‘按钮，图片越大识别时间越长，超过25秒未完成识别视为失败"></textarea>
-    <input class="my-clz" type="button" id="addImgOcr" value="识别图片" />
+    <textarea class="my-clz" id="resp"
+      placeholder="显示识别结果；从点击识别图片按钮时开始异步执行，超过7秒未选择图片提示错误只能重新点击’识别图片‘按钮，图片越大识别时间越长，超过25秒未完成识别视为失败"></textarea>
+    <input class="my-clz" type="button" id="addImgOcr" value="加载网页中..." disabled />
   </div>
 
 </body>
 <script src="./jquery-3.6.1.min.js"></script>
 <script>
+  function funcTime(start, outTime, func, errFunc) {
+    setTimeout(function () {
+      var r = func();
+      time = new Date().getTime() - start;
+      if (r) {
+        return;
+      } else if (time < outTime) {
+        funcTime(start, outTime, func, errFunc);
+      } else {
+        errFunc();
+      }
+    }, 200);
+  }
+
+
   var ocrIframe = $("#ocr");
 
   ocrIframe[0].onload = function () {
-
     var ocr = ocrIframe.contents();
-
-    function funcTime(start, outTime, func, errFunc) {
-      setTimeout(function () {
-        var r = func();
-        time = new Date().getTime() - start;
-        if (r) {
-          return;
-        } else if (time < outTime) {
-          funcTime(start, outTime, func, errFunc);
-        } else {
-          errFunc();
-        }
-      }, 200);
-    }
 
     function getOcrVal(start) {
       funcTime(new Date().getTime(), 25000, function () {
@@ -115,8 +116,31 @@
       });
     });
 
-
+    function init(start) {
+      $('#addImgOcr').val("开始加载OCR...");
+      var isLoad = false;
+      funcTime(start, 100000, function () {
+        var load = ocr.find(".row span:contains('加载')");
+        var time = new Date().getTime() - start;
+        if (load.length > 0) {
+          isLoad = true;
+          $('#addImgOcr').val("OCR" + load.text());
+          return false;
+        } else if (!isLoad && time < 10000) {
+          return false;
+        }
+        $('#addImgOcr').val("识别图片");
+        $('#addImgOcr').removeAttr("disabled");
+        return true;
+      }, function () {
+        console.log("OCR初始化超时 >", time);
+        $("#resp").val("OCR初始化超时！！！");
+      });
+    }
+    init(new Date().getTime());
   }
+
+
 </script>
 
 </html>
