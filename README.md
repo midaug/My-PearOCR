@@ -13,7 +13,7 @@ http://ocr.midaug.win/
 ## 原理
 My-PearOCR是对PearOCR的前端再包装，通过隐藏iframe的方式将PearOCR内嵌到我们自己的网站中。通过jquery访问iframe中PearOCR操作按钮，并扫描PearOCR页面元素变化来获取识别结果   
 具体请看PearOCR目录中my.html的源码   
-PearOCR中除了jquery-3.6.1.min.js、my.html文件外其余都从 https://pearocr.com/#/ 中下载下来，为解决其中一些运行错误问题修改了极小部分源码
+PearOCR中除了jquery-3.6.1.min.js、my.html文件外其余都从 https://pearocr.com/#/ 中下载下来，下载时间为2022年11月24日其PearOCR版本为2.1，为解决其中一些运行错误问题修改了极小部分源码
 
 ## 部署
 以此项目部署调试   
