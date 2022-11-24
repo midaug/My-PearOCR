@@ -10,6 +10,8 @@ My-PearOCR是一种集成PearOCR的Demo实验，为集成PearOCR提供一种思�
 https://ocr.midaug.win/   
 离线资源有点多，打开网页后查看控制台出现antOcr.onSetLangFinish消息即为全部加载成功   
 
+![](https://github.com/midaug/My-PearOCR/images/demo.gif)
+
    
 ## 原理
 My-PearOCR是对PearOCR的前端再包装，通过隐藏iframe的方式将PearOCR内嵌到我们自己的网站中。通过jquery访问iframe中PearOCR操作按钮，并扫描PearOCR页面元素变化来获取识别结果   
